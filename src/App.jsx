@@ -30,7 +30,7 @@ function App() {
   const [houseLevel, setHouseLevel] = useState(1);
   const [resourceCost, setResourceCost] = useState(10);
 
-  const initialHouseSize = 50; 
+  const initialHouseSize = 50;
 
   useEffect(() => {
     const intervals = {};
@@ -48,7 +48,7 @@ function App() {
         clearInterval(intervals[resource]);
       }
     };
-  }, [increments]); 
+  }, [increments]);
 
   const increaseIncrement = (resource) => {
     if (
@@ -127,56 +127,95 @@ function App() {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Resource Management</h1>
-      <div>
-        {Object.entries(resources).map(([resource, count]) => (
-          <div key={resource} style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
-            <img 
-              src={
-                resource === 'food' ? foodIcon :
-                resource === 'iron' ? ironIcon :
-                resource === 'mud' ? mudIcon :
-                resource === 'wood' ? woodIcon : 
-                null 
-              } 
-              alt={resource} 
-              style={{ width: '30px', height: '30px', marginRight: '10px' }} 
-            />
-            <h3>{resource}</h3>
-            <p style={{ fontSize: '20px' }}>{count.toFixed(2)}</p>
-            <button 
-              onClick={() => increaseIncrement(resource)} 
-              style={{ padding: '10px 20px', fontSize: '16px' }}
-            >
-              Increase Increment by 20% (Cost: {incrementCosts[resource].toFixed(2)} of each)
-            </button>
-          </div>
-        ))}
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: '#f4f4f9', fontFamily: "'Roboto', sans-serif", padding: '20px' }}>
+      {/* Left Section: Resources */}
+      <div style={{ width: '45%', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', padding: '20px', marginRight: '20px' }}>
+        <h1 style={{ color: '#333', marginBottom: '20px', fontSize: '28px' }}>Resource Management</h1>
+        <div>
+          {Object.entries(resources).map(([resource, count]) => (
+            <div key={resource} style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px', backgroundColor: '#fafafa', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img 
+                  src={ 
+                    resource === 'food' ? foodIcon : 
+                    resource === 'iron' ? ironIcon : 
+                    resource === 'mud' ? mudIcon : 
+                    resource === 'wood' ? woodIcon : null
+                  } 
+                  alt={resource} 
+                  style={{ width: '40px', height: '40px', marginRight: '15px', borderRadius: '50%' }} 
+                />
+                <div>
+                  <h3 style={{ fontSize: '20px', color: '#444' }}>{resource}</h3>
+                  <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#555' }}>{count.toFixed(2)}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => increaseIncrement(resource)} 
+                style={{
+                  padding: '12px 25px',
+                  fontSize: '16px',
+                  borderRadius: '5px',
+                  backgroundColor: '#4CAF50',
+                  color: '#fff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  marginTop: '10px',
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}
+              >
+                Increase Increment by 20% (Cost: {incrementCosts[resource].toFixed(2)} of each)
+              </button>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '40px' }}>
+          <button onClick={saveGame} style={{ padding: '12px 25px', fontSize: '16px', borderRadius: '5px', backgroundColor: '#2196F3', color: '#fff', border: 'none', marginRight: '15px' }}>
+            Save Game
+          </button>
+          <button onClick={loadGame} style={{ padding: '12px 25px', fontSize: '16px', borderRadius: '5px', backgroundColor: '#FFC107', color: '#fff', border: 'none' }}>
+            Load Game
+          </button>
+        </div>
       </div>
-      <div style={{ marginTop: '40px' }}>
-        <h3>House Level: {houseLevel}</h3>
-        <p>Cost to Level Up: {resourceCost.toFixed(2)} of each resource</p>
-        <button onClick={levelUpHouse} style={{ padding: '10px 20px', fontSize: '16px' }}>
+
+      {/* Right Section: House */}
+      <div style={{ width: '45%', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', padding: '20px' }}>
+        <h3 style={{ fontSize: '22px', color: '#333' }}>House Level: {houseLevel}</h3>
+        <p style={{ fontSize: '18px', color: '#666' }}>Cost to Level Up: {resourceCost.toFixed(2)} of each resource</p>
+        <button 
+          onClick={levelUpHouse} 
+          style={{
+            padding: '12px 25px',
+            fontSize: '16px',
+            borderRadius: '5px',
+            backgroundColor: '#FF5722',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = '#e64a19'}
+          onMouseOut={(e) => e.target.style.backgroundColor = '#FF5722'}
+        >
           Level Up House
         </button>
-        <img 
-          src={casaIcon} 
-          alt="House" 
-          style={{ 
-            width: `${initialHouseSize * Math.pow(1.2, houseLevel - 1)}px`, 
-            height: `${initialHouseSize * Math.pow(1.2, houseLevel - 1)}px`, 
-            marginTop: '20px' 
-          }} 
-        />
-      </div>
-      <div style={{ marginTop: '40px' }}>
-        <button onClick={saveGame} style={{ padding: '10px 20px', fontSize: '16px', marginRight: '10px' }}>
-          Save Game
-        </button>
-        <button onClick={loadGame} style={{ padding: '10px 20px', fontSize: '16px' }}>
-          Load Game
-        </button>
+        <div style={{ marginTop: '30px', textAlign: 'center' }}>
+          <img 
+            src={casaIcon} 
+            alt="House" 
+            style={{ 
+              width: `${initialHouseSize * Math.pow(1.2, houseLevel - 1)}px`, 
+              height: `${initialHouseSize * Math.pow(1.2, houseLevel - 1)}px`, 
+              marginTop: '20px', 
+              transition: 'all 0.3s ease',
+              borderRadius: '10px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)'
+            }} 
+          />
+        </div>
       </div>
     </div>
   );
